@@ -1,0 +1,73 @@
+/* main stylesheet */
+@import url(http://fonts.googleapis.com/css?family=Raleway:400,700);
+@import url(http://fonts.googleapis.com/css?family=Lato);
+
+img {
+    width: 100%;
+}
+
+body {
+    font-family: 'Lato', 'Helvetica Neue', Helvetica, sans-serif;
+    font-size: 18px;
+}
+
+h1, h2, h3, h4 {
+    font-family: 'Raleway', 'Helvetica Neue', Helvetica, sans-serif;
+}
+
+.jumbotron {
+    background-image: url(../img/background.jpg);
+    background-size: 100% 100%;
+    color: #FFF;
+    text-align: right;
+}
+
+nav {
+    font-size: 125%;
+    background-color: #6ABB2F;
+    border-radius: 6px;
+    padding: 0.5em;
+}
+
+nav ul {
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+nav li {
+    display: inline-block;
+    list-style: none;
+    margin-right: 1em;
+}
+
+nav a:link,
+nav a:visited {
+    color: #EEE;
+}
+
+nav a:hover,
+nav a:focus {
+    color: #FFF;
+    text-decoration: none;
+}
+
+.nav-fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    border-radius: 0;
+    box-shadow: 0 5px 5px rgba(0,0,0,0.5);
+}
+
+.nav-placeholder {
+    display: none;
+}
+
+section img.pull-left {
+    margin-right: 1em;
+}
+
+section img.pull-right {
+    margin-left: 1em;
+}
