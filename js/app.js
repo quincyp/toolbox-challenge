@@ -6,46 +6,62 @@
 
 function onReady() {
 	//var htmlDoc = document.getElementById('tile');
-
+	var gameBoard = $('#game-board');
 	var i;
-	var tileArray;
-	var tileString = [];
-	tileArray = _.shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
-				  17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]);
-	console.log(tileArray);
-	for(i =  0; i <= 31; i++) {
-		tileString[i] = ".\\img\\tile" + tileArray[i];
+	var tileInfo = [];
+	var tileSrc = [];
+	var doubleInfo = [];
+	var doubleSrc = [];
+	var tileArray = [];
+
+	var tileAll = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+				  17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32];
+
+	var tileData1;
+	var tileData2;
+	var tileData3;
+	var tileData4;
+
+	for(i = 0; i <= 14; i += 2) {
+		tileArray[i] = tileAll[i];
+		tileArray[i + 1] = tileAll[i];
 	}
-	console.log(tileString);
-	//=======TRYING THIS OUT========
-	/*if(htmlDoc.className = 'tile') {
-		htmlDoc.attr('src', tileString[i]);
-	}*/
-	
-	var tile = 'img/sec1.jpg'//'any kind of data assoc with element';
-	var info = 'some other data';
-	//create and configure a new <img> element...
-	var newTile = $(document.createElement('img'));
+	tileArray = _.shuffle(tileArray);
+	console.log(tileAll);
+	console.log(tileArray);
 
-	newTile.attr('src', 'img/background.jpg');
-	newTile.attr('alt', 'photo of nature');
-	newTile.attr('width', '250px');
-	
-	//use the .data() method to associate extra data with HTML elements
-	newTile.data('assocTile', tile) //first param is a key
-	newTile.data('tileInfo', info) //second param is a value
+	for(i =  0; i <= 15; i++) {
+		tileInfo[i] = "tile" + tileArray[i];
+		tileSrc[i] = ".\\img\\tile" + tileArray[i] + ".jpg";
+	}
+	console.log(tileInfo);
+	console.log(tileSrc);
 
-	//when an image in game-board is cicked
-	$('#tile img').click(function(){
-		//remember that 'this' refers to the DOM element that raised the event
-		//wrapped in jQuery $() to get more functionality
+	for(i = 0; i <= 15; i++) {
+		var tile = tileSrc[i];
+		var info = tileInfo[i];
+		//create and configure a new <img> element...
+		var newTile = $(document.createElement('img'));
+		newTile.attr('src', '.\\img\\tile-back.png');
+		newTile.attr('alt', 'random');
+		newTile.attr('width', '100%');
+		newTile.attr('class', 'col-md-3 col-xs-3')
+
+		//use the .data() method to associate extra data with HTML elements
+		newTile.data('assocTile', tile) //first param is a key
+		newTile.data('tileInfo', info) //second param is a value
+
+		gameBoard.append(newTile);
+
+	}
+
+	$('#game-board img').click(function(){
 		var clickedImage = $(this);
 		var tileData1 = clickedImage.data('assocTile');//var to data
 		var tileData2 = clickedImage.data('tileInfo');
 
 		clickedImage.attr('src', tileData1);//on event chang attr data
 		clickedImage.attr('alt', tileData2);
-
 		console.log(tileData1);//shows in log
 		console.log(tileData2);
 	});

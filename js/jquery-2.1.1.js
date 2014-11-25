@@ -4652,10 +4652,11 @@ jQuery.Event = function( src, props ) {
 
 		// Events bubbling up the document may have been marked as prevented
 		// by a handler lower down the tree; reflect the correct value.
-		this.isDefaultPrevented = src.defaultPrevented ||
+		/*this.isDefaultPrevented = src.defaultPrevented ||
 				src.defaultPrevented === undefined &&
 				// Support: Android < 4.0
-				src.returnValue === false ?
+				src.returnValue === false ? !!==========CHANGE MADE HERE=========!!*/
+				this.isDefaultPrevented = src.defaultPrevented ? returnTrue : returnFalse;
 			returnTrue :
 			returnFalse;
 
