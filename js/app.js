@@ -13,6 +13,7 @@ function onReady() {
 	var doubleInfo = [];
 	var doubleSrc = [];
 	var tileArray = [];
+	var count = 0;
 
 	var tileAll = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
 				  17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32];
@@ -21,6 +22,7 @@ function onReady() {
 	var tileData2;
 	var tileData3;
 	var tileData4;
+	var match;
 
 	for(i = 0; i <= 14; i += 2) {
 		tileArray[i] = tileAll[i];
@@ -57,13 +59,27 @@ function onReady() {
 
 	$('#game-board img').click(function(){
 		var clickedImage = $(this);
-		var tileData1 = clickedImage.data('assocTile');//var to data
+		count++;
+		console.log(count);
+		tileData1 = clickedImage.data('assocTile');//var to data
 		var tileData2 = clickedImage.data('tileInfo');
-
 		clickedImage.attr('src', tileData1);//on event chang attr data
 		clickedImage.attr('alt', tileData2);
-		console.log(tileData1);//shows in log
-		console.log(tileData2);
+
+		//Tests click 1 vs click 2 to see if matching
+		if(count % 2 == 1) {
+			tileData3 = tileData1;
+		}
+		if(count % 2 == 0) {
+			if(tileData1 == tileData3) {
+				match = true;
+			} else if (tileData1 != tileData3) {
+				match = false;
+			}
+			console.log(match);
+		}
+		console.log(tileData1);
+		console.log(tileData3);
 	});
 }
 

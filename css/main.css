@@ -19,10 +19,10 @@ h1, h2, h3, h4 {
 }
 
 .jumbotron {
-    background-image: url(../img/background.jpg);
+    background-image: url(../img/games-banner.jpg);
     background-size: 100% 100%;
     color: #FFF;
-    text-align: right;
+    text-align: left;
 }
 
 nav {
