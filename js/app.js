@@ -5,7 +5,7 @@
 
 
 
-// when document is ready
+//When document is ready
 $(document).ready(function() {
     var gameBoard = $('#game-board');
     var tileAll = [];
@@ -17,7 +17,7 @@ $(document).ready(function() {
     var timer; 
     var count = 0;
 
-
+    //Lists tiles with attributes
 	for (i = 1; i <= 32; i++) {
 	    tileAll.push({
 	        tileNum: i,
@@ -27,7 +27,7 @@ $(document).ready(function() {
 	    });
 	}
 
-
+	//Starts game on start game button click
     $('#start-game').click(function() {
         window.clearInterval(timer);
         gameBoard.empty();
@@ -38,7 +38,7 @@ $(document).ready(function() {
         var missedNum = 0;
         $('#missed').text(missedNum);
 
-
+        //Picks 8 tiles, duplicates, and shuffles
         tileAll = _.shuffle(tileAll);
         for (i = 0; i <= 14; i += 2) {
             tileArray[i] = tileAll[i];
@@ -46,6 +46,7 @@ $(document).ready(function() {
         }
         tileShuffled = _.shuffle(tileArray);
 
+        //Creates tiles/board
         var newTile;
         _.forEach(tileShuffled, function(tile) {
             tile.flipped = false;
@@ -59,6 +60,7 @@ $(document).ready(function() {
             gameBoard.append(newTile);
         });   
 
+        //Tests tiles in accordance to game
         var rep = true;
         $('#game-board img').click(function() {
             var clickedImage = $(this);
@@ -109,7 +111,7 @@ $(document).ready(function() {
             count++;
         });
 
-		// gets starting milliseconds
+		//Time counter
         var startTime = Date.now();
         timer = window.setInterval(function() {
             var elapsedSeconds;
@@ -118,11 +120,14 @@ $(document).ready(function() {
         }, 1000);
     });
 
-}); //document ready function
+});
+
+//Clears timer
 function stopTimer(timer) {
     window.clearInterval(timer);
 }
 
+//Flips tile depending on status/game
 function flipTile(tile, img) {
     img.fadeOut(200, function() {
         if (tile.flipped) {
@@ -135,11 +140,7 @@ function flipTile(tile, img) {
     });
 }
 
-function winScreen() {
-    //$('.overlay').show();
-    //game-board
-}
-
+//Slides instructions overboard to follow along while playing or hide if not needed
 $( "#instructions" ).click(function() {
-  $( "#instructionToggle" ).slideToggle( "slow" )
+	$( "#instructionToggle" ).slideToggle( "slow" )
 });
