@@ -2,6 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
+		<meta name="author" content="Quincy Pham">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>jQuery Game Challenge</title>
 		<link rel="stylesheet" type="text/css" href="./css/main.css">
@@ -13,9 +14,43 @@
 		    <main class="container" id="top">
             <header class="jumbotron">
 				<h1>Game Challenge!</h1>
-				<p class="lead">Match the tiles the score is based off how many guesses you make</p>         
+				<p class="lead">How fast can you win?</p>         
             </header>
+
+			<p>
+				<button type="button" id="start-game" class="btn btn-success">Start New Game</button>
+				<button type="button" id="instructions" class="btn btn-info" data-toggle="modal" data-target=".instructionModal">Instructions</button>
+			</p>
+			<div id = "instructionToggle" hidden=true>
+	            <h2>Instructions</h2>
+	            <p>The goal of the game is simply to match all the pictures. There will be 8 pairs of pictures, so 16 pictures total.</p>
+	            <p>If you match all the pictures then you win!</p>
+			</div>
+
+			<div class="modal fade winScreenModal" id="winScreenModal" tabindex="-1" role="dialog" aria-labelledby="winScreen" aria-hidden="true">
+			    <div class="modal-dialog modal-sm">
+			        <div class="modal-content">
+			            <h1 id="congrats">Congratulations on Winning!</h1>
+			        </div>
+			    </div>
+			</div>		
+
+			<section class='row stats'>
+			<div class="col-md-2 col-md-offset-3">
+				<p class='stats'>Time: <span id="elapsed-seconds"></span></p>
+			</div>
+			<div class="col-md-2">
+				<p class='stats'>Matches: <span id="matched">0</span></p>
+			</div>
+			<div class="col-md-2">
+				<p class='stats'>Pairs Remaining: <span id="remaining">8</span></p>
+			</div>
+			<div class="col-md-2">
+				<p class='stats'>Missed: <span id="missed">0</span></p>
+			</div>
 			
+			</section>
+
 			<div class="row">
 			
 				<div id="game-board">

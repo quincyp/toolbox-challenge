@@ -1,87 +1,145 @@
-/* app.js
-* main script file for our little application
-* */
-
+// reference for toolbox
+// app.js: our main javascript file for this app
 "use strict";
 
-function onReady() {
-	//var htmlDoc = document.getElementById('tile');
-	var gameBoard = $('#game-board');
+
+
+
+// when document is ready
+$(document).ready(function() {
+    var gameBoard = $('#game-board');
+    var tileAll = [];
 	var i;
-	var tileInfo = [];
-	var tileSrc = [];
-	var doubleInfo = [];
-	var doubleSrc = [];
-	var tileArray = [];
-	var count = 0;
+    var tileArray = [];
+    var tileShuffled = [];
+    var tileData1;
+    var tileData2;
+    var timer; 
+    var count = 0;
 
-	var tileAll = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
-				  17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32];
 
-	var tileData1;
-	var tileData2;
-	var tileData3;
-	var tileData4;
-	var match;
-
-	for(i = 0; i <= 14; i += 2) {
-		tileArray[i] = tileAll[i];
-		tileArray[i + 1] = tileAll[i];
-	}
-	tileArray = _.shuffle(tileArray);
-	console.log(tileAll);
-	console.log(tileArray);
-
-	for(i =  0; i <= 15; i++) {
-		tileInfo[i] = "tile" + tileArray[i];
-		tileSrc[i] = ".\\img\\tile" + tileArray[i] + ".jpg";
-	}
-	console.log(tileInfo);
-	console.log(tileSrc);
-
-	for(i = 0; i <= 15; i++) {
-		var tile = tileSrc[i];
-		var info = tileInfo[i];
-		//create and configure a new <img> element...
-		var newTile = $(document.createElement('img'));
-		newTile.attr('src', '.\\img\\tile-back.png');
-		newTile.attr('alt', 'random');
-		newTile.attr('width', '100%');
-		newTile.attr('class', 'col-md-3 col-xs-3')
-
-		//use the .data() method to associate extra data with HTML elements
-		newTile.data('assocTile', tile) //first param is a key
-		newTile.data('tileInfo', info) //second param is a value
-
-		gameBoard.append(newTile);
-
+	for (i = 1; i <= 32; i++) {
+	    tileAll.push({
+	        tileNum: i,
+	        src: './img/tile' + i + '.jpg',
+	        flipped: false,
+	        matched: false
+	    });
 	}
 
-	$('#game-board img').click(function(){
-		var clickedImage = $(this);
-		count++;
-		console.log(count);
-		tileData1 = clickedImage.data('assocTile');//var to data
-		var tileData2 = clickedImage.data('tileInfo');
-		clickedImage.attr('src', tileData1);//on event chang attr data
-		clickedImage.attr('alt', tileData2);
 
-		//Tests click 1 vs click 2 to see if matching
-		if(count % 2 == 1) {
-			tileData3 = tileData1;
-		}
-		if(count % 2 == 0) {
-			if(tileData1 == tileData3) {
-				match = true;
-			} else if (tileData1 != tileData3) {
-				match = false;
-			}
-			console.log(match);
-		}
-		console.log(tileData1);
-		console.log(tileData3);
-	});
+    $('#start-game').click(function() {
+        window.clearInterval(timer);
+        gameBoard.empty();
+        var matchedNum = 0;
+        $('#matched').text(matchedNum);
+        var remainingNum = 8;
+        $('#remaining').text(remainingNum);
+        var missedNum = 0;
+        $('#missed').text(missedNum);
+
+
+        tileAll = _.shuffle(tileAll);
+        for (i = 0; i <= 14; i += 2) {
+            tileArray[i] = tileAll[i];
+            tileArray[i + 1] = _.clone(tileAll[i]);
+        }
+        tileShuffled = _.shuffle(tileArray);
+
+        var newTile;
+        _.forEach(tileShuffled, function(tile) {
+            tile.flipped = false;
+            newTile = $(document.createElement('img'));
+            newTile.attr('width', '100%');
+            newTile.attr('class', 'col-md-3 col-xs-3');
+            newTile.attr('src', 'img/tile-back.png');
+            newTile.attr('alt', 'tile ' + tile.tileNum);
+
+            newTile.data('tile', tile);
+            gameBoard.append(newTile);
+        });   
+
+        var rep = true;
+        $('#game-board img').click(function() {
+            var clickedImage = $(this);
+            var tile = clickedImage.data('tile');
+            if (tile.matched || tile.flipped || !rep) {
+                return; //not clickable
+            }
+            if (count == 0) {
+                count++;
+                tileData1 = clickedImage;
+                tileData2 = tile;
+                flipTile(tile, clickedImage);
+            }
+            if (count == 2) {
+                count = 0;
+                rep = false;
+                var clickedImage2 = clickedImage;
+                flipTile(tile, clickedImage);
+                if (tileData2.tileNum == tile.tileNum) {
+                    tileData2.matched == true;
+                    clickedImage.matched == true;
+                    tileData1.addClass('matched');
+                    clickedImage.addClass('matched');
+                    console.log(tileData1);
+                    matchedNum++;
+                    $('#matched').text(matchedNum);
+                    remainingNum--;
+                    $('#remaining').text(remainingNum);
+
+                    // executes if user wins
+                    if (matchedNum == 8) {
+                        stopTimer(timer);
+                        $('#winScreenModal').modal('show');
+                        $('#congrats').addClass('zoomIn animated');
+                    }
+                } else {
+                    missedNum++;
+                    $('#missed').text(missedNum);
+                    setTimeout(function() {
+                        flipTile(tileData1.data('tile'), tileData1);
+                        flipTile(tile, clickedImage);
+                    }, 800);
+                }
+                count = 0;
+                setTimeout(function() { rep = true;}, 800);
+                return;
+            }
+            count++;
+        });
+
+		// gets starting milliseconds
+        var startTime = Date.now();
+        timer = window.setInterval(function() {
+            var elapsedSeconds;
+            elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
+            $('#elapsed-seconds').text(elapsedSeconds + ' second');
+        }, 1000);
+    });
+
+}); //document ready function
+function stopTimer(timer) {
+    window.clearInterval(timer);
 }
 
-//Listens to the DOM for ready
-document.addEventListener('DOMContentLoaded', onReady);
+function flipTile(tile, img) {
+    img.fadeOut(200, function() {
+        if (tile.flipped) {
+            img.attr('src', 'img/tile-back.png');
+        } else {
+            img.attr('src', tile.src);
+        }
+        tile.flipped = !tile.flipped;
+        img.fadeIn(100);
+    });
+}
+
+function winScreen() {
+    //$('.overlay').show();
+    //game-board
+}
+
+$( "#instructions" ).click(function() {
+  $( "#instructionToggle" ).slideToggle( "slow" )
+});
